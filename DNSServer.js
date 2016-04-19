@@ -1,5 +1,5 @@
-var dns = require('native-dns')
-var named = require('./lib/index')
+var dns = require('native-dns');
+var named = require('node-named');
 
 // eg 12.31.24.43.hfskjdhf.labs.jp
 var reg = /(\d+\-\d+\-\d+\-\d+)\.[^.]+\.labs\.jp$/;
