@@ -1,0 +1,19 @@
+{
+  "name": "RegDNS",
+  "description": "DNS server using Regexp",
+  "version": "0.0.1",
+  "author": "Junichi Hashimoto <sou3ilow@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sou3ilow/regdns.git"
+  },
+  "main": "DNSServer.js",
+  "engines": {
+    "node": ">=0.6"
+  },
+  "dependencies": {
+    "node-named": "0.0.1",
+    "native-dns": "0.7.0"
+  },
+  "license": "BSD-2-Clause"
+}
