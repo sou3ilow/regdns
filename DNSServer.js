@@ -3,13 +3,13 @@ var named = require('node-named');
 
 // eg 12.31.24.43.hfskjdhf.labs.jp
 var reg = /(\d+\-\d+\-\d+\-\d+)\.[^.]+\.labs\.jp$/;
-var external = '8.8.8.8'
+var external = '8.8.8.8';
 
 function foward(query, opt) {
 	var question = dns.Question({
 		name: query.name(),
 		type: query.type()
-	})
+	});
 	//var start = Date.now();
 	var req = dns.Request({
 		question: question,
@@ -56,20 +56,28 @@ function setupServer() {
 					console.log('  >> response recieved.');
 					//console.log(err, answer);
 					if ( err ) {
-						console.log("    ..error: ", err)
+						console.log("    ..error: ", err);
 						return;
 					}
 
 					var a = answer.answer[0];
 
 					try {
-						if ( a ) {
+						if ( !a ) {
+							console.log("    ..cannot resolve.");
+							server.send(query); // 404?
+						} else if ( a.type == 1 ) { // a
 							console.log("    ..resolved: " + a.address);
 							record = new named.ARecord(a.address);
 							query.addAnswer(domain, record, a.ttl);
-							server.send(query); // 404?
+							server.send(query);
+						} else if ( a.type == 5 ) { // cname
+							console.log("    ..resolved: " + a.data);
+							record = new named.CNAMERecord(a.data);
+							query.addAnswer(domain, record, a.ttl);
+							server.send(query);
 						} else {
-							console.log("    ..cannot resolve.");
+							console.log("    ..resolved but unknown type", a);
 						}
 					} catch (e) {
 						console.log(e, "answer.answer[0] = ", a);
